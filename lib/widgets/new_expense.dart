@@ -9,10 +9,23 @@ class NewExpense extends StatefulWidget {
 
 class _NewExpense extends State<NewExpense> {
   final _titleController = TextEditingController();
+  final _amountController = TextEditingController();
+
+  void _presentDatePicker() {
+    final now = DateTime.now();
+    final firstDate = DateTime(now.year - 1, now.month, now.day);
+
+    showDatePicker(
+        context: context,
+        initialDate: now,
+        firstDate: firstDate,
+        lastDate: now);
+  }
 
   @override
   void dispose() {
     _titleController.dispose();
+    _amountController.dispose();
     super.dispose();
   }
 
@@ -29,9 +42,34 @@ class _NewExpense extends State<NewExpense> {
           ),
           Row(
             children: [
+              Expanded(
+                child: TextField(
+                  controller: _amountController,
+                  keyboardType: TextInputType.number,
+                  maxLength: 10,
+                  decoration: const InputDecoration(
+                      label: Text('Amount'), prefixText: 'Rp. '),
+                ),
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const Text('Selected Date'),
+                    IconButton(
+                      onPressed: _presentDatePicker,
+                      icon: const Icon(Icons.calendar_month),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
               ElevatedButton(onPressed: () {}, child: const Text('save')),
               const SizedBox(width: 12),
-              OutlinedButton(
+              TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
