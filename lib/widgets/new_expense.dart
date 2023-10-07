@@ -29,7 +29,13 @@ class _NewExpense extends State<NewExpense> {
           ),
           Row(
             children: [
-              ElevatedButton(onPressed: () {}, child: const Text('save'))
+              ElevatedButton(onPressed: () {}, child: const Text('save')),
+              const SizedBox(width: 12),
+              OutlinedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('cancel'))
             ],
           ),
         ],
