@@ -2,6 +2,7 @@ import 'package:expense_tracker/models/expense.dart';
 import 'package:expense_tracker/widgets/new_expense.dart';
 import 'package:flutter/material.dart';
 import 'package:expense_tracker/widgets/expenses_list/expenses_list.dart';
+import 'chart/chart.dart';
 
 class Expenses extends StatefulWidget {
   const Expenses({super.key});
@@ -31,6 +32,7 @@ class _ExpensesState extends State<Expenses> {
 
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
+      useSafeArea: true,
       isScrollControlled: true,
       context: context,
       builder: (ctx) => NewExpense(onAddExpense: _addExpense),
@@ -68,6 +70,7 @@ class _ExpensesState extends State<Expenses> {
   @override
   Widget build(BuildContext context) {
     Widget mainContent = const Center(child: Text('No expenses found.'));
+    final width = MediaQuery.of(context).size.width;
 
     if (_registeredExpenses.isNotEmpty) {
       mainContent = ExpensesList(
@@ -83,12 +86,19 @@ class _ExpensesState extends State<Expenses> {
               onPressed: _openAddExpenseOverlay, icon: const Icon(Icons.add))
         ],
       ),
-      body: Column(
-        children: [
-          const Text('Judul'),
-          Expanded(child: mainContent),
-        ],
-      ),
+      body: width < 600
+          ? Column(
+              children: [
+                Chart(expenses: _registeredExpenses),
+                Expanded(child: mainContent),
+              ],
+            )
+          : Row(
+              children: [
+                Expanded(child: Chart(expenses: _registeredExpenses)),
+                Expanded(child: mainContent),
+              ],
+            ),
     );
   }
 }
